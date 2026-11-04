@@ -1,6 +1,14 @@
 
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+  Easing,
+} from "remotion";
 
 export type MotionScene = {
   type: string;
@@ -14,6 +22,142 @@ export type MotionScene = {
 export type MotionEngineProps = {
   titleText?: string;
   scenes?: MotionScene[];
+};
+
+const HeatPumpIntro: React.FC<{ localFrame: number }> = ({
+  localFrame,
+}) => {
+  const zoom = interpolate(localFrame, [0, 210], [1, 1.16], {
+    extrapolateRight: "clamp",
+  });
+
+  const pan = interpolate(localFrame, [0, 210], [0, -65], {
+    extrapolateRight: "clamp",
+  });
+
+  const titleY = interpolate(localFrame, [0, 22], [-120, 0], {
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.cubic),
+  });
+
+  const titleOpacity = interpolate(localFrame, [0, 18], [0, 1], {
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <AbsoluteFill style={{ overflow: "hidden" }}>
+      <AbsoluteFill
+        style={{
+          transform: `translateY(${pan}px) scale(${zoom})`,
+        transformOrigin: "50% 65%",
+        overflow: "hidden",
+      }}
+      >
+        <Img
+          src={staticFile("heatpump-scene.png")}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </AbsoluteFill>
+
+      <AbsoluteFill
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(3,12,28,0.65) 0%, transparent 32%, transparent 75%, rgba(3,12,28,0.6) 100%)",
+        }}
+      />
+
+      <div
+        style={{
+          position: "absolute",
+          top: 145,
+          left: 65,
+          right: 65,
+          textAlign: "center",
+          transform: `translateY(${titleY}px)`,
+          opacity: titleOpacity,
+          fontFamily: "Arial, sans-serif",
+          fontSize: 72,
+          fontWeight: 900,
+          color: "#FFFFFF",
+          textShadow: "0 5px 25px rgba(0,0,0,0.65)",
+        }}
+      >
+        ISI POMPASI
+        <div style={{ color: "#65E3FF", fontSize: 59 }}>
+          NASIL ÇALIŞIR?
+        </div>
+      </div>
+
+      <svg
+        viewBox="0 0 1080 1920"
+        width="100%"
+        height="100%"
+        style={{ position: "absolute", inset: 0 }}
+      >
+        {Array.from({ length: 13 }).map((_, i) => {
+          const progress = ((localFrame * 0.012 + i / 13) % 1);
+          const x = interpolate(progress, [0, 1], [0, 450]);
+          const y = 1100 - Math.sin(progress * Math.PI) * 75 + i * 6;
+
+          return (
+            <circle
+              key={`cold-${i}`}
+              cx={x}
+              cy={y}
+              r={5 + i % 3}
+              fill="#56DFFF"
+              opacity={Math.sin(progress * Math.PI) * 0.85}
+            />
+          );
+        })}
+
+        {Array.from({ length: 13 }).map((_, i) => {
+          const progress = ((localFrame * 0.012 + i / 13) % 1);
+          const x = interpolate(progress, [0, 1], [520, 1050]);
+          const y = 1190 - Math.sin(progress * Math.PI) * 85 + i * 5;
+
+          return (
+            <circle
+              key={`warm-${i}`}
+              cx={x}
+              cy={y}
+              r={5 + i % 3}
+              fill="#FF9D37"
+              opacity={Math.sin(progress * Math.PI) * 0.9}
+            />
+          );
+        })}
+      </svg>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 125,
+          left: 65,
+          right: 65,
+          padding: "24px 32px",
+          borderRadius: 25,
+          background: "rgba(3,16,34,0.78)",
+          border: "2px solid rgba(100,220,255,0.45)",
+          color: "white",
+          fontFamily: "Arial, sans-serif",
+          fontSize: 38,
+          fontWeight: 700,
+          textAlign: "center",
+          opacity: interpolate(localFrame, [55, 80], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          }),
+        }}
+      >
+        Dış havadaki enerjiyi evinizin ısısına dönüştürür.
+      </div>
+    </AbsoluteFill>
+  );
 };
 
 export const MotionEngine: React.FC<MotionEngineProps> = ({
@@ -38,6 +182,12 @@ export const MotionEngine: React.FC<MotionEngineProps> = ({
     startFrame += durations[i];
   }
 
+  const localFrame = frame - startFrame;
+
+  if (activeScene?.type === "product_reveal") {
+    return <HeatPumpIntro localFrame={localFrame} />;
+  }
+
   return (
     <AbsoluteFill
       style={{
@@ -59,45 +209,16 @@ export const MotionEngine: React.FC<MotionEngineProps> = ({
           fontSize: 68,
           fontWeight: 800,
           marginTop: 45,
+          opacity: interpolate(
+            localFrame,
+            [0, 15],
+            [0, 1],
+            { extrapolateRight: "clamp" }
+          ),
         }}
       >
-        {["airflow", "heat_transfer"].includes(activeScene?.type ?? "") && (
-  <AnimatedFlow />
-)}
         {activeScene?.text ?? "Motion Graphics"}
       </div>
     </AbsoluteFill>
   );
 };
-
-export const AnimatedFlow: React.FC = () => {
-  const frame = useCurrentFrame();
-  const progress = (frame * 8) % 600;
-
-  return (
-    <svg width="800" height="300" viewBox="0 0 800 300">
-      <path
-        d="M 40 150 C 200 30, 400 270, 760 150"
-        stroke="#38BDF8"
-        strokeWidth="8"
-        fill="none"
-        strokeLinecap="round"
-        strokeDasharray="24 18"
-        strokeDashoffset={-progress}
-      />
-      <circle
-        cx="40"
-        cy="150"
-        r="18"
-        fill="#F97316"
-      />
-      <circle
-        cx="760"
-        cy="150"
-        r="18"
-        fill="#38BDF8"
-      />
-    </svg>
-  );
-};
-
