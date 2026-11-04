@@ -41,7 +41,7 @@ type JobState =
       data: JobData;
     };
 
-const compositionId = "HeatPump";
+const compositionId = "MotionEngine";
 
 export const makeRenderQueue = ({
   port,
@@ -102,7 +102,7 @@ export const makeRenderQueue = ({
 
       jobs.set(jobId, {
         status: "completed",
-        videoUrl: `http://localhost:${port}/renders/${jobId}.mp4`,
+        videoUrl: `https://ai-motion-reels.onrender.com/renders/${jobId}.mp4`,
         data: job.data,
       });
     } catch (error) {
