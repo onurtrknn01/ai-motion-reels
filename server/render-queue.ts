@@ -72,7 +72,8 @@ export const makeRenderQueue = ({
 
     try {
       const inputProps = {
-        titleText: job.data.titleText,
+  titleText: job.data.titleText,
+  scenes: job.data.scenes ?? [],
       };
 
       const composition = await selectComposition({
