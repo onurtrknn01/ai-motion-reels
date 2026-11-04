@@ -24,13 +24,23 @@ function setupApp({ remotionBundleUrl }: { remotionBundleUrl: string }) {
   // Endpoint to create a new job
   app.post("/renders", async (req, res) => {
     const titleText = req.body?.titleText || "Hello, world!";
+const scenes = req.body?.scenes;
 
+if (
+  scenes !== undefined &&
+  (!Array.isArray(scenes) || scenes.length !== 5)
+) {
+  res.status(400).json({
+    message: "scenes must contain exactly 5 scenes",
+  });
+  return;
+}
     if (typeof titleText !== "string") {
       res.status(400).json({ message: "titleText must be a string" });
       return;
     }
 
-    const jobId = queue.createJob({ titleText });
+   const jobId = queue.createJob({titleText, scenes});
 
     res.json({ jobId });
   });
