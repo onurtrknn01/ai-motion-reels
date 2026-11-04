@@ -8,6 +8,14 @@ import path from "node:path";
 
 interface JobData {
   titleText: string;
+  scenes?: {
+    type: string;
+    duration: number;
+    text: string;
+    voiceover?: string;
+    camera?: string;
+    animation?: string;
+  }[];
 }
 
 type JobState =
