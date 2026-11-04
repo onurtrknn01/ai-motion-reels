@@ -12,9 +12,16 @@ interface JobData {
     type: string;
     duration: number;
     text: string;
+
     voiceover?: string;
     camera?: string;
     animation?: string;
+
+    visualPrompt?: string;
+    imageUrl?: string;
+    textAnimation?: string;
+    soundEffects?: string[];
+    transition?: string;
   }[];
 }
 
