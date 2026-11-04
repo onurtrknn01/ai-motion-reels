@@ -33,7 +33,7 @@ type JobState =
       data: JobData;
     };
 
-const compositionId = "HelloWorld";
+const compositionId = "HeatPump";
 
 export const makeRenderQueue = ({
   port,
