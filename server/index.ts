@@ -28,10 +28,12 @@ const scenes = req.body?.scenes;
 
 if (
   scenes !== undefined &&
-  (!Array.isArray(scenes) || scenes.length !== 5)
+  (!Array.isArray(scenes) ||
+    scenes.length < 1 ||
+    scenes.length > 8)
 ) {
   res.status(400).json({
-    message: "scenes must contain exactly 5 scenes",
+    message: "scenes must contain between 1 and 8 scenes",
   });
   return;
 }
