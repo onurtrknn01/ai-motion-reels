@@ -8,7 +8,24 @@ import {
   useVideoConfig,
 } from "remotion";
 
-export const HeatPump: React.FC = () => {
+type HeatPumpScene = {
+  type: string;
+  duration: number;
+  text: string;
+  voiceover?: string;
+  camera?: string;
+  animation?: string;
+};
+
+type HeatPumpProps = {
+  titleText?: string;
+  scenes?: HeatPumpScene[];
+};
+
+export const HeatPump: React.FC<HeatPumpProps> = ({
+  titleText = "Kozlusan HP HEAT R290",
+  scenes = [],
+}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
