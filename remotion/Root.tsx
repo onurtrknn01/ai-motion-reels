@@ -1,22 +1,18 @@
-import { Composition } from "remotion";
-import { HelloWorld, helloWorldCompSchema } from "./HelloWorld";
 
-// Each <Composition> is an entry in the sidebar!
+import {Composition} from "remotion";
+import {HelloWorld, helloWorldCompSchema} from "./HelloWorld";
+import {HeatPump} from "./HeatPump";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        // You can take the "id" to render a video:
-        // npx remotion render HelloWorld
         id="HelloWorld"
         component={HelloWorld}
         durationInFrames={800}
         fps={30}
         width={1920}
         height={1080}
-        // You can override these props for each render:
-        // https://www.remotion.dev/docs/parametrized-rendering
         schema={helloWorldCompSchema}
         defaultProps={{
           titleText: "Render Server Template",
@@ -24,6 +20,15 @@ export const RemotionRoot: React.FC = () => {
           logoColor1: "#91EAE4",
           logoColor2: "#86A8E7",
         }}
+      />
+
+      <Composition
+        id="HeatPump"
+        component={HeatPump}
+        durationInFrames={270}
+        fps={30}
+        width={1080}
+        height={1920}
       />
     </>
   );
