@@ -50,7 +50,15 @@ if (
     const jobId = req.params.jobId;
     const job = queue.jobs.get(jobId);
 
-    res.json(job);
+    if (!job) {
+  res.status(404).json({
+    status: "not_found",
+    message: "Video kaydı bulunamadı. Sunucu yeniden başlamış olabilir.",
+  });
+  return;
+}
+
+res.json(job);
   });
 
   // Endpoint to cancel a job
