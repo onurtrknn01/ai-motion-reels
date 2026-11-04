@@ -61,8 +61,43 @@ export const MotionEngine: React.FC<MotionEngineProps> = ({
           marginTop: 45,
         }}
       >
+        {["airflow", "heat_transfer"].includes(activeScene?.type ?? "") && (
+  <AnimatedFlow />
+)}
         {activeScene?.text ?? "Motion Graphics"}
       </div>
     </AbsoluteFill>
   );
 };
+
+export const AnimatedFlow: React.FC = () => {
+  const frame = useCurrentFrame();
+  const progress = (frame * 8) % 600;
+
+  return (
+    <svg width="800" height="300" viewBox="0 0 800 300">
+      <path
+        d="M 40 150 C 200 30, 400 270, 760 150"
+        stroke="#38BDF8"
+        strokeWidth="8"
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray="24 18"
+        strokeDashoffset={-progress}
+      />
+      <circle
+        cx="40"
+        cy="150"
+        r="18"
+        fill="#F97316"
+      />
+      <circle
+        cx="760"
+        cy="150"
+        r="18"
+        fill="#38BDF8"
+      />
+    </svg>
+  );
+};
+
