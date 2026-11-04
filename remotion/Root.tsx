@@ -2,18 +2,8 @@
 import {Composition} from "remotion";
 import {HelloWorld, helloWorldCompSchema} from "./HelloWorld";
 import {HeatPump} from "./HeatPump";
-<Composition
-  id="MotionEngine"
-  component={MotionEngine}
-  durationInFrames={900}
-  fps={30}
-  width={1080}
-  height={1920}
-  defaultProps={{
-    titleText: "AI Motion Graphics",
-    scenes: [],
-  }}
-/>
+import {MotionEngine} from "./MotionEngine";
+
 export const RemotionRoot: React.FC = () => {
   return (
     <>
@@ -41,6 +31,18 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
       />
+      <Composition
+  id="MotionEngine"
+  component={MotionEngine}
+  durationInFrames={900}
+  fps={30}
+  width={1080}
+  height={1920}
+  defaultProps={{
+    titleText: "AI Motion Graphics",
+    scenes: [],
+  }}
+/>
     </>
   );
 };
